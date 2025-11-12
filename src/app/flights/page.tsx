@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ interface Flight {
   status: string;
 }
 
-export default function FlightsPage() {
+function FlightsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -321,5 +322,20 @@ export default function FlightsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function FlightsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <div className="text-xl text-gray-900 dark:text-white">Loading flights...</div>
+        </div>
+      </div>
+    }>
+      <FlightsContent />
+    </Suspense>
   );
 }
